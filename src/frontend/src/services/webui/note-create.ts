@@ -1,13 +1,17 @@
 import type { Response } from "./models/response";
-import type { Note } from "./models/note";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-export async function noteCreate(
-  title: string,
-  content: string
-): Promise<Response<Note>> {
+import type { Note } from "./models/note";
+import { useNoteGetAllInvalidate } from "@/services/webui/note-get-all";
+
+async function noteCreate(request: {
+  title: string;
+  content: string;
+}): Promise<Response<Note>> {
   const payload = {
-    title: title,
-    content: content,
+    title: request.title,
+    content: request.content,
   };
 
   const serialized = JSON.stringify(payload);
@@ -24,3 +28,24 @@ export async function noteCreate(
     throw new Error(`Error calling noteCreate: ${error}`);
   }
 }
+
+export const useNoteCreate = () => {
+  const { invalidateNoteGetAll } = useNoteGetAllInvalidate();
+
+  const mutation = useMutation({
+    mutationFn: noteCreate,
+    onSuccess: async (res) => {
+      if (res.error) {
+        toast("Error:", { description: res.errorMessage });
+      } else {
+        toast("Success:", { description: JSON.stringify(res.data, null, 2) });
+        await invalidateNoteGetAll();
+      }
+    },
+    onError: (error) => {
+      toast("Error:", { description: error.message });
+    },
+  });
+
+  return mutation;
+};

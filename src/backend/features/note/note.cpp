@@ -27,20 +27,19 @@ std::vector<Note> note_srv_get_all() {
     return notes;
 }
 
-std::optional<Note> note_srv_read_by_id(const int id) {
+std::optional<Note> note_srv_read_by_id(const int64_t id) {
     spdlog::info("note_srv_read_by_id called with ID: {}", id);
     return note_db_read_by_id(id);
 }
 
-std::optional<Note> note_srv_update(const int id, const std::string& new_title, const std::string& new_content) {
+std::optional<Note> note_srv_update(const int64_t id, const std::string& new_title, const std::string& new_content) {
     spdlog::info("note_srv_update called with ID: {}", id);
     spdlog::debug("New title: {}, new content length: {}", new_title, new_content.size());
     return note_db_update(id, new_title, new_content);
 }
 
-bool note_srv_delete(const int id) {
+bool note_srv_delete(const int64_t id) {
     spdlog::info("note_srv_delete called with ID: {}", id);
-    const bool success = note_db_delete(id);
-    spdlog::debug("Delete success: {}", success);
-    return success;
+    return note_db_delete(id);
+    spdlog::debug("Delete success");
 }
