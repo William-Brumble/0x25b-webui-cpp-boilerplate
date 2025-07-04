@@ -1,8 +1,12 @@
 import type { Response } from "./models/response";
+import { useMutation } from "@tanstack/react-query";
 
-export async function noteDelete(id: number): Promise<Response<null>> {
+import { useNoteGetAllInvalidate } from "@/services/webui/note-get-all";
+import { toast } from "sonner";
+
+async function noteDelete(request: { id: number }): Promise<Response<null>> {
   const payload = {
-    id: id,
+    id: request.id,
   };
 
   const serialized = JSON.stringify(payload);
@@ -19,3 +23,24 @@ export async function noteDelete(id: number): Promise<Response<null>> {
     throw new Error(`Error calling noteDelete: ${error}`);
   }
 }
+
+export const useNoteDelete = () => {
+  const { invalidateNoteGetAll } = useNoteGetAllInvalidate();
+
+  const mutation = useMutation({
+    mutationFn: noteDelete,
+    onSuccess: async (res) => {
+      if (res.error) {
+        toast("Error:", { description: res.errorMessage });
+      } else {
+        toast("Success:", { description: JSON.stringify(res.data, null, 2) });
+        await invalidateNoteGetAll();
+      }
+    },
+    onError: (error) => {
+      toast("Error:", { description: error.message });
+    },
+  });
+
+  return mutation;
+};

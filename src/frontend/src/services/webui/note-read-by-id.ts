@@ -1,9 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
+
 import type { Response } from "./models/response";
 import type { Note } from "./models/note";
+import {
+  DEFAULT_STALE_TIME,
+  queryClient,
+} from "@/services/query-client/query-client";
 
-export async function noteReadById(id: number): Promise<Response<Note>> {
+async function noteReadById(request: { id: number }): Promise<Response<Note>> {
   const payload = {
-    id: id,
+    id: request.id,
   };
 
   const serialized = JSON.stringify(payload);
@@ -20,3 +26,41 @@ export async function noteReadById(id: number): Promise<Response<Note>> {
     throw new Error(`Error calling noteReadById: ${error}`);
   }
 }
+
+const QID_NOTE_GET_BY_ID = "fetch-note-get-by-id";
+
+export const prefetchNoteReadById = async (id: number) => {
+  return queryClient.prefetchQuery({
+    queryKey: [QID_NOTE_GET_BY_ID, id],
+    queryFn: () => noteReadById({ id }),
+    staleTime: DEFAULT_STALE_TIME,
+  });
+};
+
+export const useNoteReadById = (id: number) => {
+  return useQuery({
+    queryKey: [QID_NOTE_GET_BY_ID, id],
+    queryFn: () => noteReadById({ id }),
+    staleTime: DEFAULT_STALE_TIME,
+  });
+};
+
+export const useFetchNoteReadById = (id: number) => {
+  return queryClient.fetchQuery({
+    queryKey: [QID_NOTE_GET_BY_ID, id],
+    queryFn: () => noteReadById({ id }),
+    staleTime: DEFAULT_STALE_TIME,
+  });
+};
+
+export const useNoteReadByIdInvalidate = (id: number) => {
+  const invalidateNoteGetAll = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [QID_NOTE_GET_BY_ID, id],
+    });
+  };
+
+  return {
+    invalidateNoteGetAll,
+  };
+};

@@ -77,7 +77,7 @@ std::vector<Note> note_db_get_all() {
     return notes;
 }
 
-std::optional<Note> note_db_read_by_id(const int id) {
+std::optional<Note> note_db_read_by_id(const int64_t id) {
     spdlog::info("note_db_read_by_id called with id={}", id);
 
     sqlite3pp::query qry(db, "SELECT id, title, content, created_at FROM notes WHERE id = ?;");
@@ -100,17 +100,19 @@ std::optional<Note> note_db_read_by_id(const int id) {
     return std::nullopt;
 }
 
-std::optional<Note> note_db_update(const int id, const std::string& new_title, const std::string& new_content) {
+std::optional<Note> note_db_update(const int64_t id, const std::string& new_title, const std::string& new_content) {
     spdlog::info("note_db_update called with id={}", id);
-    spdlog::debug("New title: {}, new content length: {}", new_title, new_content.size());
+    spdlog::debug("New title: {}, new title length: {}", new_title, new_title.size());
+    spdlog::debug("New content: {}, new content length: {}", new_content, new_content.size());
 
     sqlite3pp::command cmd(db, "UPDATE notes SET title = ?, content = ? WHERE id = ?;");
     cmd.bind(1, new_title, sqlite3pp::nocopy);
     cmd.bind(2, new_content, sqlite3pp::nocopy);
     cmd.bind(3, id);
 
-    if (cmd.execute() <= 0) {
-        spdlog::warn("No rows updated for id={}", id);
+    const int result = cmd.execute();
+    if (result != SQLITE_OK) {
+        spdlog::debug("Failed to update note");
         return std::nullopt;
     }
 
@@ -118,13 +120,17 @@ std::optional<Note> note_db_update(const int id, const std::string& new_title, c
     return note_db_read_by_id(id);
 }
 
-bool note_db_delete(const int id) {
+bool note_db_delete(const int64_t id) {
     spdlog::info("note_db_delete called with id={}", id);
 
     sqlite3pp::command cmd(db, "DELETE FROM notes WHERE id = ?;");
     cmd.bind(1, id);
-    bool success = cmd.execute() > 0;
 
-    spdlog::debug("Delete result for id {}: {}", id, success);
-    return success;
+    const int result = cmd.execute();
+    if (result != SQLITE_OK) {
+        return false;
+    }
+
+    spdlog::debug("Delete result for id {}", id);
+    return true;
 }

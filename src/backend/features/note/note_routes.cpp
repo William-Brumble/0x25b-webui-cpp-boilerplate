@@ -1,4 +1,3 @@
-#include <iostream>
 #include <webui.hpp>
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
@@ -105,14 +104,14 @@ void note_route_read_by_id(webui::window::event* event)
         return;
     }
 
-    if (!validate_field(request, "id", json::value_t::number_integer))
+    if (!validate_field(request, "id", json::value_t::number_unsigned))
     {
         spdlog::warn("Missing or invalid type for: id");
         event->return_string(make_response(true, "Missing or invalid type for: id").dump());
         return;
     }
 
-    const int id = request["id"].get<int>();
+    const int64_t id = request["id"].get<int64_t>();
     spdlog::debug("Reading note with ID: {}", id);
 
     std::optional<Note> note = note_srv_read_by_id(id);
@@ -153,7 +152,7 @@ void note_route_update(webui::window::event* event)
         return;
     }
 
-    if (!validate_field(request, "id", json::value_t::number_integer))
+    if (!validate_field(request, "id", json::value_t::number_unsigned))
     {
         spdlog::warn("Missing or invalid type for: id");
         event->return_string(make_response(true, "Missing or invalid type for: id").dump());
@@ -174,13 +173,12 @@ void note_route_update(webui::window::event* event)
         return;
     }
 
-    const int id = request["id"].get<int>();
+    const int64_t id = request["id"].get<int64_t>();
     const std::string title = request["title"].get<std::string>();
     const std::string content = request["content"].get<std::string>();
     spdlog::debug("Updating note ID {} with title: {}, content length: {}", id, title, content.size());
 
     std::optional<Note> note = note_srv_update(id, title, content);
-
     if (!note)
     {
         spdlog::error("Failed to update note ID: {}", id);
@@ -217,14 +215,14 @@ void note_route_delete(webui::window::event* event)
         return;
     }
 
-    if (!validate_field(request, "id", json::value_t::number_integer))
+    if (!validate_field(request, "id", json::value_t::number_unsigned))
     {
         spdlog::warn("Missing or invalid type for: id");
         event->return_string(make_response(true, "Missing or invalid type for: id").dump());
         return;
     }
 
-    const int id = request["id"].get<int>();
+    const int64_t id = request["id"].get<int64_t>();
     spdlog::debug("Attempting to delete note with ID: {}", id);
 
     const bool success = note_srv_delete(id);
