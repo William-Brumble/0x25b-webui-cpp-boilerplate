@@ -5,7 +5,7 @@
 #include "features/database/database.h"
 #include "features/arguments/arguments.h"
 #include "features/logging/logger.h"
-#include "features/note/note.h"
+#include "features/note/services/note.h"
 #include "features/note/note_routes.h"
 
 void exit(webui::window::event *e)

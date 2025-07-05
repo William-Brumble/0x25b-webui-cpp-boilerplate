@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>  // Added for logging
 
 #include "features/note/services/note_database.h"
-#include "features/note/note.h"
+#include "features/note/services/note.h"
 #include "features/note/models/note_model.h"
 
 bool note_srv_init_schema() {

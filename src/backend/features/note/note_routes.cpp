@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 
 #include "features/note/models/note_model.h"
-#include "note.h"
+#include "features/note/services/note.h"
 #include "features/utils/make_response.h"
 #include "features/utils/validate_field.h"
 
