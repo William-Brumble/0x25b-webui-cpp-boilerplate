@@ -1,12 +1,14 @@
 #include <iostream>
 
 #include "webui.hpp"
-#include "vfs.h" // Generated using: python vfs.py "/path/to/folder" "vfs.h"
 #include "features/database/database.h"
 #include "features/arguments/arguments.h"
 #include "features/logging/logger.h"
-#include "features/note/services/note.h"
-#include "features/note/note_routes.h"
+#include "features/note/note.h"
+#include "features/note/routes/note_routes.h"
+#include "features/webui/webui.h"
+#include "features/webui/routes/webui_routes.h"
+#include "features/webui/state/webui_state.h"
 
 void exit(webui::window::event *e)
 {
@@ -40,41 +42,47 @@ int main(const int argc, char** argv)
         spdlog::debug("Notes schema initialized successfully");
     }
 
-    spdlog::info("Creating webui window...");
-    constexpr int windowWidth = 550;
-    constexpr int windowHeight = 450;
-    constexpr int windowPosX = 250;
-    constexpr int windowPosY = 250;
-    constexpr auto entryFile = "index.html";
-    webui::window win;
-    webui::set_config(multi_client, true);
-    webui::set_config(use_cookies, false);
-    win.set_size(windowWidth, windowHeight);
-    win.set_position(windowPosX, windowPosY);
-    win.set_file_handler(vfs);
-    spdlog::debug("WebUI window configured: size={}x{}, pos={}x{}", windowWidth, windowHeight, windowPosX, windowPosY);
+    spdlog::info("Initializing webui schema...");
+    if (!webui_srv_init_schema()) {
+        spdlog::error("Failed to initialize webui schema");
+    } else {
+        spdlog::debug("WebUI schema initialized successfully");
+    }
+
+    spdlog::info("Initializing webui...");
+    if (!webui_srv_init()) {
+        spdlog::error("Failed to initialize webui");
+    } else {
+        spdlog::debug("WebUI initialized successfully");
+    }
 
     spdlog::info("Binding route handlers to webui window...");
-    win.bind("note_route_create", note_route_create);
-    win.bind("note_route_get_all", note_route_get_all);
-    win.bind("note_route_read_by_id", note_route_read_by_id);
-    win.bind("note_route_update", note_route_update);
-    win.bind("note_route_delete", note_route_delete);
-    win.bind("exit", exit);
+    // note ===================================================================
+    window.win.bind("note_route_create", note_route_create);
+    window.win.bind("note_route_get_all", note_route_get_all);
+    window.win.bind("note_route_read_by_id", note_route_read_by_id);
+    window.win.bind("note_route_update", note_route_update);
+    window.win.bind("note_route_delete", note_route_delete);
+    // webui ==================================================================
+    window.win.bind("webui_route_read", webui_route_read);
+    window.win.bind("webui_route_update_kiosk", webui_route_update_kiosk);
+    window.win.bind("webui_route_update_size", webui_route_update_size);
+    window.win.bind("webui_route_update_pos", webui_route_update_pos);
+    window.win.bind("exit", exit);
     spdlog::debug("Route handlers bound");
 
     spdlog::info("Showing webui window...");
-    if (!win.show(entryFile)) {
+    if (!webui_srv_show_window()) {
         spdlog::error("Failed to open webui window");
     } else {
         spdlog::info("WebUI window shown successfully");
     }
 
     spdlog::info("Application has started");
-    webui_wait();
+    webui_srv_wait();
 
     spdlog::info("Cleaning webui window...");
-    webui_clean();
+    webui_srv_clean();
 
     spdlog::info("Program finished, exiting now");
     return 0;

@@ -2,19 +2,20 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include "features/note/routes/note_routes.h"
 #include "features/note/models/note_model.h"
-#include "features/note/services/note.h"
+#include "features/note/note.h"
 #include "features/utils/make_response.h"
 #include "features/utils/validate_field.h"
 
 using json = nlohmann::json;
 
-void note_route_create(webui::window::event* event)
+void note_route_create(webui::window::event* e)
 {
     spdlog::info("note_route_create called");
 
     json request;
-    std::string payload = event->get_string();
+    std::string payload = e->get_string();
     spdlog::debug("Payload received: {}", payload);
 
     try {
@@ -22,21 +23,21 @@ void note_route_create(webui::window::event* event)
     } catch (const json::parse_error& err) {
         spdlog::error("JSON parse error: {}", err.what());
         const json res = make_response(true, err.what());
-        event->return_string(res.dump());
+        e->return_string(res.dump());
         return;
     }
 
     if (!validate_field(request, "title", json::value_t::string))
     {
         spdlog::warn("Missing or invalid type for: title");
-        event->return_string(make_response(true, "Missing or invalid type for: title").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: title").dump());
         return;
     }
 
     if (!validate_field(request, "content", json::value_t::string))
     {
         spdlog::warn("Missing or invalid type for: content");
-        event->return_string(make_response(true, "Missing or invalid type for: content").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: content").dump());
         return;
     }
 
@@ -49,7 +50,7 @@ void note_route_create(webui::window::event* event)
     if (!note)
     {
         spdlog::error("Failed to create note");
-        event->return_string(make_response(true, "Failed to create note").dump());
+        e->return_string(make_response(true, "Failed to create note").dump());
         return;
     }
 
@@ -62,10 +63,10 @@ void note_route_create(webui::window::event* event)
     response_data["createdAt"] = note->created_at;
 
     const json res = make_response(false, "", response_data);
-    event->return_string(res.dump());
+    e->return_string(res.dump());
 }
 
-void note_route_get_all(webui::window::event* event)
+void note_route_get_all(webui::window::event* e)
 {
     spdlog::info("note_route_get_all called");
 
@@ -84,15 +85,15 @@ void note_route_get_all(webui::window::event* event)
     }
 
     const json res = make_response(false, "", response_data);
-    event->return_string(res.dump());
+    e->return_string(res.dump());
 }
 
-void note_route_read_by_id(webui::window::event* event)
+void note_route_read_by_id(webui::window::event* e)
 {
     spdlog::info("note_route_read_by_id called");
 
     json request;
-    std::string payload = event->get_string();
+    std::string payload = e->get_string();
     spdlog::debug("Payload received: {}", payload);
 
     try {
@@ -100,14 +101,14 @@ void note_route_read_by_id(webui::window::event* event)
     } catch (const json::parse_error& err) {
         spdlog::error("JSON parse error: {}", err.what());
         const json res = make_response(true, err.what());
-        event->return_string(res.dump());
+        e->return_string(res.dump());
         return;
     }
 
     if (!validate_field(request, "id", json::value_t::number_unsigned))
     {
         spdlog::warn("Missing or invalid type for: id");
-        event->return_string(make_response(true, "Missing or invalid type for: id").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: id").dump());
         return;
     }
 
@@ -119,7 +120,7 @@ void note_route_read_by_id(webui::window::event* event)
     if (!note)
     {
         spdlog::error("Note with ID {} not found", id);
-        event->return_string(make_response(true, "Failed to read note").dump());
+        e->return_string(make_response(true, "Failed to read note").dump());
         return;
     }
 
@@ -132,15 +133,15 @@ void note_route_read_by_id(webui::window::event* event)
     response_data["createdAt"] = note->created_at;
 
     const json res = make_response(false, "", response_data);
-    event->return_string(res.dump());
+    e->return_string(res.dump());
 }
 
-void note_route_update(webui::window::event* event)
+void note_route_update(webui::window::event* e)
 {
     spdlog::info("note_route_update called");
 
     json request;
-    std::string payload = event->get_string();
+    std::string payload = e->get_string();
     spdlog::debug("Payload received: {}", payload);
 
     try {
@@ -148,28 +149,28 @@ void note_route_update(webui::window::event* event)
     } catch (const json::parse_error& err) {
         spdlog::error("JSON parse error: {}", err.what());
         const json res = make_response(true, err.what());
-        event->return_string(res.dump());
+        e->return_string(res.dump());
         return;
     }
 
     if (!validate_field(request, "id", json::value_t::number_unsigned))
     {
         spdlog::warn("Missing or invalid type for: id");
-        event->return_string(make_response(true, "Missing or invalid type for: id").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: id").dump());
         return;
     }
 
     if (!validate_field(request, "title", json::value_t::string))
     {
         spdlog::warn("Missing or invalid type for: title");
-        event->return_string(make_response(true, "Missing or invalid type for: title").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: title").dump());
         return;
     }
 
     if (!validate_field(request, "content", json::value_t::string))
     {
         spdlog::warn("Missing or invalid type for: content");
-        event->return_string(make_response(true, "Missing or invalid type for: content").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: content").dump());
         return;
     }
 
@@ -182,7 +183,7 @@ void note_route_update(webui::window::event* event)
     if (!note)
     {
         spdlog::error("Failed to update note ID: {}", id);
-        event->return_string(make_response(true, "Failed to update note").dump());
+        e->return_string(make_response(true, "Failed to update note").dump());
         return;
     }
 
@@ -195,15 +196,15 @@ void note_route_update(webui::window::event* event)
     response_data["createdAt"] = note->created_at;
 
     const json res = make_response(false, "", response_data);
-    event->return_string(res.dump());
+    e->return_string(res.dump());
 }
 
-void note_route_delete(webui::window::event* event)
+void note_route_delete(webui::window::event* e)
 {
     spdlog::info("note_route_delete called");
 
     json request;
-    std::string payload = event->get_string();
+    std::string payload = e->get_string();
     spdlog::debug("Payload received: {}", payload);
 
     try {
@@ -211,14 +212,14 @@ void note_route_delete(webui::window::event* event)
     } catch (const json::parse_error& err) {
         spdlog::error("JSON parse error: {}", err.what());
         const json res = make_response(true, err.what());
-        event->return_string(res.dump());
+        e->return_string(res.dump());
         return;
     }
 
     if (!validate_field(request, "id", json::value_t::number_unsigned))
     {
         spdlog::warn("Missing or invalid type for: id");
-        event->return_string(make_response(true, "Missing or invalid type for: id").dump());
+        e->return_string(make_response(true, "Missing or invalid type for: id").dump());
         return;
     }
 
@@ -229,12 +230,12 @@ void note_route_delete(webui::window::event* event)
     if (!success)
     {
         spdlog::error("Failed to delete note with ID: {}", id);
-        event->return_string(make_response(true, "Failed to delete note").dump());
+        e->return_string(make_response(true, "Failed to delete note").dump());
         return;
     }
 
     spdlog::info("Note deleted successfully: ID {}", id);
 
     const json res = make_response(false, "");
-    event->return_string(res.dump());
+    e->return_string(res.dump());
 }
