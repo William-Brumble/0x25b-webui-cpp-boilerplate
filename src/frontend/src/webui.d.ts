@@ -8,6 +8,10 @@ declare global {
     note_route_get_all: () => Promise<string>;
     note_route_read_by_id: (payload: string) => Promise<string>;
     note_route_update: (payload: string) => Promise<string>;
+    webui_route_read: (payload: string) => Promise<string>;
+    webui_route_update_kiosk: (payload: string) => Promise<string>;
+    webui_route_update_size: (payload: string) => Promise<string>;
+    webui_route_pos: (payload: string) => Promise<string>;
     exit: () => void;
   }
 

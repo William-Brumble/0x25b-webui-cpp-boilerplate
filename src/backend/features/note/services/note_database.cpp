@@ -4,8 +4,8 @@
 #include <sqlite3pp/sqlite3pp.h>
 #include <spdlog/spdlog.h>
 
-#include "features/database/database.h"
 #include "features/note/services/note_database.h"
+#include "features/database/database.h"
 #include "features/note/models/note_model.h"
 
 bool note_db_init_schema() {
@@ -30,13 +30,13 @@ bool note_db_init_schema() {
     }
 }
 
-std::optional<Note> note_db_create(const std::string& title, const std::string& content) {
+std::optional<Note> note_db_create(const std::string& pTitle, const std::string& pContent) {
     spdlog::info("note_db_create called");
-    spdlog::debug("Inserting note with title: {}, content length: {}", title, content.size());
+    spdlog::debug("Inserting note with title: {}, content length: {}", pTitle, pContent.size());
 
     sqlite3pp::query qry(db, "INSERT INTO notes (title, content) VALUES (?, ?) RETURNING id, title, content, created_at;");
-    qry.bind(1, title, sqlite3pp::nocopy);
-    qry.bind(2, content, sqlite3pp::nocopy);
+    qry.bind(1, pTitle, sqlite3pp::nocopy);
+    qry.bind(2, pContent, sqlite3pp::nocopy);
 
     for (auto row : qry) {
         Note note;
@@ -77,11 +77,11 @@ std::vector<Note> note_db_get_all() {
     return notes;
 }
 
-std::optional<Note> note_db_read_by_id(const int64_t id) {
-    spdlog::info("note_db_read_by_id called with id={}", id);
+std::optional<Note> note_db_read_by_id(const int64_t pId) {
+    spdlog::info("note_db_read_by_id called with id={}", pId);
 
     sqlite3pp::query qry(db, "SELECT id, title, content, created_at FROM notes WHERE id = ?;");
-    qry.bind(1, id);
+    qry.bind(1, static_cast<long long>(pId));
 
     for (auto row : qry) {
         Note note;
@@ -96,19 +96,19 @@ std::optional<Note> note_db_read_by_id(const int64_t id) {
         return note;
     }
 
-    spdlog::warn("No note found with id={}", id);
+    spdlog::warn("No note found with id={}", pId);
     return std::nullopt;
 }
 
-std::optional<Note> note_db_update(const int64_t id, const std::string& new_title, const std::string& new_content) {
-    spdlog::info("note_db_update called with id={}", id);
-    spdlog::debug("New title: {}, new title length: {}", new_title, new_title.size());
-    spdlog::debug("New content: {}, new content length: {}", new_content, new_content.size());
+std::optional<Note> note_db_update(const int64_t pId, const std::string& pNewTitle, const std::string& pNewContent) {
+    spdlog::info("note_db_update called with id={}", pId);
+    spdlog::debug("New title: {}, new title length: {}", pNewTitle, pNewTitle.size());
+    spdlog::debug("New content: {}, new content length: {}", pNewContent, pNewContent.size());
 
     sqlite3pp::command cmd(db, "UPDATE notes SET title = ?, content = ? WHERE id = ?;");
-    cmd.bind(1, new_title, sqlite3pp::nocopy);
-    cmd.bind(2, new_content, sqlite3pp::nocopy);
-    cmd.bind(3, id);
+    cmd.bind(1, pNewTitle, sqlite3pp::nocopy);
+    cmd.bind(2, pNewContent, sqlite3pp::nocopy);
+    cmd.bind(3, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
@@ -117,20 +117,20 @@ std::optional<Note> note_db_update(const int64_t id, const std::string& new_titl
     }
 
     spdlog::debug("Update succeeded, fetching updated note");
-    return note_db_read_by_id(id);
+    return note_db_read_by_id(pId);
 }
 
-bool note_db_delete(const int64_t id) {
-    spdlog::info("note_db_delete called with id={}", id);
+bool note_db_delete(const int64_t pId) {
+    spdlog::info("note_db_delete called with id={}", pId);
 
     sqlite3pp::command cmd(db, "DELETE FROM notes WHERE id = ?;");
-    cmd.bind(1, id);
+    cmd.bind(1, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
         return false;
     }
 
-    spdlog::debug("Delete result for id {}", id);
+    spdlog::debug("Delete result for id {}", pId);
     return true;
 }
