@@ -16,6 +16,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # === frontend build & VFS ====================================================
 find_package(Python3 REQUIRED)
+find_program(NPM_EXECUTABLE npm REQUIRED)
 
 set(FRONTEND_DIR ${PROJECT_SOURCE_DIR}/src/frontend)
 set(FRONTEND_BUILD_DIR ${FRONTEND_DIR}/dist)
@@ -25,8 +26,8 @@ set(VFS_OUTPUT ${PROJECT_SOURCE_DIR}/src/backend/vfs.h)
 # Always define the frontend build target (for manual use)
 add_custom_target(frontend
         COMMAND ${CMAKE_COMMAND} -E echo "Running frontend build..."
-        COMMAND npm install
-        COMMAND npm run build
+        COMMAND ${NPM_EXECUTABLE} install
+        COMMAND ${NPM_EXECUTABLE} run build
         COMMAND ${CMAKE_COMMAND} -E echo "Generating vfs.h..."
         COMMAND ${Python3_EXECUTABLE} ${VFS_SCRIPT} ${FRONTEND_BUILD_DIR} ${VFS_OUTPUT}
         WORKING_DIRECTORY ${FRONTEND_DIR}
@@ -70,6 +71,9 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Frontend")
             spdlog::spdlog
             sqlite3pp::sqlite3pp
             webui::webui
-            ws2_32
     )
+
+    if (WIN32)
+        target_link_libraries(program PRIVATE ws2_32)
+    endif()
 endif()

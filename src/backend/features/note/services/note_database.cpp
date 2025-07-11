@@ -81,7 +81,7 @@ std::optional<Note> note_db_read_by_id(const int64_t pId) {
     spdlog::info("note_db_read_by_id called with id={}", pId);
 
     sqlite3pp::query qry(db, "SELECT id, title, content, created_at FROM notes WHERE id = ?;");
-    qry.bind(1, pId);
+    qry.bind(1, static_cast<long long>(pId));
 
     for (auto row : qry) {
         Note note;
@@ -108,7 +108,7 @@ std::optional<Note> note_db_update(const int64_t pId, const std::string& pNewTit
     sqlite3pp::command cmd(db, "UPDATE notes SET title = ?, content = ? WHERE id = ?;");
     cmd.bind(1, pNewTitle, sqlite3pp::nocopy);
     cmd.bind(2, pNewContent, sqlite3pp::nocopy);
-    cmd.bind(3, pId);
+    cmd.bind(3, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
@@ -124,7 +124,7 @@ bool note_db_delete(const int64_t pId) {
     spdlog::info("note_db_delete called with id={}", pId);
 
     sqlite3pp::command cmd(db, "DELETE FROM notes WHERE id = ?;");
-    cmd.bind(1, pId);
+    cmd.bind(1, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
