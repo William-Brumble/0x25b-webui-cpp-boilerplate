@@ -59,7 +59,7 @@ std::optional<Settings> webui_db_read_by_id(const int64_t pId) {
     spdlog::info("webui_db_read_by_id called with id={}", pId);
 
     sqlite3pp::query qry(db, "SELECT id, kiosk, size_width, size_height, pos_x, pos_y FROM webui WHERE id = ?;");
-    qry.bind(1, pId);
+    qry.bind(1, static_cast<long long>(pId));
 
     for (auto row : qry) {
         Settings settings;
@@ -91,10 +91,10 @@ std::optional<Settings> webui_db_create(const bool pKiosk, const int64_t pWidth,
 
     sqlite3pp::query qry(db, "INSERT INTO webui (kiosk, size_width, size_height, pos_x, pos_y) VALUES (?, ?, ?, ?, ?) RETURNING id, kiosk, size_width, size_height, pos_x, pos_y;");
     qry.bind(1, pKiosk ? 1 : 0);
-    qry.bind(2, pWidth);
-    qry.bind(3, pHeight);
-    qry.bind(4, pX);
-    qry.bind(5, pY);
+    qry.bind(2, static_cast<long long>(pWidth));
+    qry.bind(3, static_cast<long long>(pHeight));
+    qry.bind(4, static_cast<long long>(pX));
+    qry.bind(5, static_cast<long long>(pY));
 
     for (auto row : qry) {
         Settings settings;
@@ -121,7 +121,7 @@ std::optional<Settings> webui_db_update_kiosk(const int64_t pId, const bool pKio
 
     sqlite3pp::command cmd(db, "UPDATE webui SET kiosk = ? WHERE id = ?;");
     cmd.bind(1, pKiosk);
-    cmd.bind(2, pId);
+    cmd.bind(2, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
@@ -139,9 +139,9 @@ std::optional<Settings> webui_db_update_size(const int64_t pId, const int64_t pW
     spdlog::debug("New width: {}, new height: {}", pWidth, pHeight);
 
     sqlite3pp::command cmd(db, "UPDATE webui SET size_width = ?, size_height = ? WHERE id = ?;");
-    cmd.bind(1, pWidth);
-    cmd.bind(2, pHeight);
-    cmd.bind(3, pId);
+    cmd.bind(1, static_cast<long long>(pWidth));
+    cmd.bind(2, static_cast<long long>(pHeight));
+    cmd.bind(3, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
@@ -158,9 +158,9 @@ std::optional<Settings> webui_db_update_pos(const int64_t pId, const int64_t pX,
     spdlog::debug("New x: {}, new y: {}", pX, pY);
 
     sqlite3pp::command cmd(db, "UPDATE webui SET pos_x = ?, pos_y = ? WHERE id = ?;");
-    cmd.bind(1, pX);
-    cmd.bind(2, pY);
-    cmd.bind(3, pId);
+    cmd.bind(1, static_cast<long long>(pX));
+    cmd.bind(2, static_cast<long long>(pY));
+    cmd.bind(3, static_cast<long long>(pId));
 
     const int result = cmd.execute();
     if (result != SQLITE_OK) {
