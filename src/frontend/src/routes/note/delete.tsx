@@ -1,3 +1,7 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,10 +13,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNoteDelete } from "@/services/webui/note-delete";
-import { Trash2 } from "lucide-react";
-import { useState } from "react";
 
-export function DeleteById() {
+export const Route = createFileRoute("/note/delete")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const [id, setId] = useState(0);
 
   const mutate = useNoteDelete();
@@ -24,7 +30,7 @@ export function DeleteById() {
   };
 
   return (
-    <div className="lg:col-start-1 row-start-4 lg:row-start-4">
+    <div className="flex-1 p-4">
       <Card className="shadow-lg border bg-card/70 dark:bg-card/60 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
