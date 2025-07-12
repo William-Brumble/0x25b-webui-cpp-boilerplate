@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Edit } from "lucide-react";
 
@@ -14,7 +15,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components//ui/button";
 import { useNoteUpdate } from "@/services/webui/note-update";
 
-export function UpdateNote() {
+export const Route = createFileRoute("/note/update")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const [id, setId] = useState<number | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -34,7 +39,7 @@ export function UpdateNote() {
   };
 
   return (
-    <div className="lg:col-start-1 row-start-3 lg:row-start-3">
+    <div className="flex-1 p-4">
       <Card className="shadow-lg border bg-card/70 dark:bg-card/60 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-orange-600 dark:text-orange-400">

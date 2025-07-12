@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 
 import {
@@ -14,7 +15,11 @@ import { useState } from "react";
 import { useFetchNoteReadById } from "@/services/webui/note-read-by-id";
 import { toast } from "sonner";
 
-export function ReadById() {
+export const Route = createFileRoute("/note/read")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const [id, setId] = useState<number | null>(null);
 
   const handleSubmit = async () => {
@@ -32,7 +37,7 @@ export function ReadById() {
   };
 
   return (
-    <div className="lg:col-start-1 row-start-2 lg:row-start-2">
+    <div className="flex-1 p-4">
       <Card className="shadow-lg border bg-card/70 dark:bg-card/60 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">

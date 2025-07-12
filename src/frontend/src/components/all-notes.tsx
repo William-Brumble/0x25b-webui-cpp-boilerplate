@@ -23,7 +23,7 @@ export function AllNotes() {
   }
 
   return (
-    <div className="lg:col-start-2 lg:row-span-4 row-start-5">
+    <div className="flex-1 p-4">
       <Card className="shadow-lg border bg-card/70 dark:bg-card/60 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
