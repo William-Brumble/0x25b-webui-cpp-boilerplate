@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
+# Enable compile_commands.json for LSP (clangd)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Project metadata
 project(program VERSION 1.0 LANGUAGES C CXX)
 

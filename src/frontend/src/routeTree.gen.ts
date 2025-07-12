@@ -8,223 +8,223 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root';
-import { Route as SettingsRouteRouteImport } from './routes/settings/route';
-import { Route as NoteRouteRouteImport } from './routes/note/route';
-import { Route as IndexRouteImport } from './routes/index';
-import { Route as SettingsSettingsRouteImport } from './routes/settings/settings';
-import { Route as NoteUpdateRouteImport } from './routes/note/update';
-import { Route as NoteReadRouteImport } from './routes/note/read';
-import { Route as NoteDeleteRouteImport } from './routes/note/delete';
-import { Route as NoteCreateRouteImport } from './routes/note/create';
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteRouteImport } from './routes/settings/route'
+import { Route as NoteRouteRouteImport } from './routes/note/route'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsSettingsRouteImport } from './routes/settings/settings'
+import { Route as NoteUpdateRouteImport } from './routes/note/update'
+import { Route as NoteReadRouteImport } from './routes/note/read'
+import { Route as NoteDeleteRouteImport } from './routes/note/delete'
+import { Route as NoteCreateRouteImport } from './routes/note/create'
 
 const SettingsRouteRoute = SettingsRouteRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NoteRouteRoute = NoteRouteRouteImport.update({
-    id: '/note',
-    path: '/note',
-    getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/note',
+  path: '/note',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsSettingsRoute = SettingsSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => SettingsRouteRoute,
-} as any);
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => SettingsRouteRoute,
+} as any)
 const NoteUpdateRoute = NoteUpdateRouteImport.update({
-    id: '/update',
-    path: '/update',
-    getParentRoute: () => NoteRouteRoute,
-} as any);
+  id: '/update',
+  path: '/update',
+  getParentRoute: () => NoteRouteRoute,
+} as any)
 const NoteReadRoute = NoteReadRouteImport.update({
-    id: '/read',
-    path: '/read',
-    getParentRoute: () => NoteRouteRoute,
-} as any);
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => NoteRouteRoute,
+} as any)
 const NoteDeleteRoute = NoteDeleteRouteImport.update({
-    id: '/delete',
-    path: '/delete',
-    getParentRoute: () => NoteRouteRoute,
-} as any);
+  id: '/delete',
+  path: '/delete',
+  getParentRoute: () => NoteRouteRoute,
+} as any)
 const NoteCreateRoute = NoteCreateRouteImport.update({
-    id: '/create',
-    path: '/create',
-    getParentRoute: () => NoteRouteRoute,
-} as any);
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => NoteRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-    '/': typeof IndexRoute;
-    '/note': typeof NoteRouteRouteWithChildren;
-    '/settings': typeof SettingsRouteRouteWithChildren;
-    '/note/create': typeof NoteCreateRoute;
-    '/note/delete': typeof NoteDeleteRoute;
-    '/note/read': typeof NoteReadRoute;
-    '/note/update': typeof NoteUpdateRoute;
-    '/settings/settings': typeof SettingsSettingsRoute;
+  '/': typeof IndexRoute
+  '/note': typeof NoteRouteRouteWithChildren
+  '/settings': typeof SettingsRouteRouteWithChildren
+  '/note/create': typeof NoteCreateRoute
+  '/note/delete': typeof NoteDeleteRoute
+  '/note/read': typeof NoteReadRoute
+  '/note/update': typeof NoteUpdateRoute
+  '/settings/settings': typeof SettingsSettingsRoute
 }
 export interface FileRoutesByTo {
-    '/': typeof IndexRoute;
-    '/note': typeof NoteRouteRouteWithChildren;
-    '/settings': typeof SettingsRouteRouteWithChildren;
-    '/note/create': typeof NoteCreateRoute;
-    '/note/delete': typeof NoteDeleteRoute;
-    '/note/read': typeof NoteReadRoute;
-    '/note/update': typeof NoteUpdateRoute;
-    '/settings/settings': typeof SettingsSettingsRoute;
+  '/': typeof IndexRoute
+  '/note': typeof NoteRouteRouteWithChildren
+  '/settings': typeof SettingsRouteRouteWithChildren
+  '/note/create': typeof NoteCreateRoute
+  '/note/delete': typeof NoteDeleteRoute
+  '/note/read': typeof NoteReadRoute
+  '/note/update': typeof NoteUpdateRoute
+  '/settings/settings': typeof SettingsSettingsRoute
 }
 export interface FileRoutesById {
-    __root__: typeof rootRouteImport;
-    '/': typeof IndexRoute;
-    '/note': typeof NoteRouteRouteWithChildren;
-    '/settings': typeof SettingsRouteRouteWithChildren;
-    '/note/create': typeof NoteCreateRoute;
-    '/note/delete': typeof NoteDeleteRoute;
-    '/note/read': typeof NoteReadRoute;
-    '/note/update': typeof NoteUpdateRoute;
-    '/settings/settings': typeof SettingsSettingsRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/note': typeof NoteRouteRouteWithChildren
+  '/settings': typeof SettingsRouteRouteWithChildren
+  '/note/create': typeof NoteCreateRoute
+  '/note/delete': typeof NoteDeleteRoute
+  '/note/read': typeof NoteReadRoute
+  '/note/update': typeof NoteUpdateRoute
+  '/settings/settings': typeof SettingsSettingsRoute
 }
 export interface FileRouteTypes {
-    fileRoutesByFullPath: FileRoutesByFullPath;
-    fullPaths:
-        | '/'
-        | '/note'
-        | '/settings'
-        | '/note/create'
-        | '/note/delete'
-        | '/note/read'
-        | '/note/update'
-        | '/settings/settings';
-    fileRoutesByTo: FileRoutesByTo;
-    to:
-        | '/'
-        | '/note'
-        | '/settings'
-        | '/note/create'
-        | '/note/delete'
-        | '/note/read'
-        | '/note/update'
-        | '/settings/settings';
-    id:
-        | '__root__'
-        | '/'
-        | '/note'
-        | '/settings'
-        | '/note/create'
-        | '/note/delete'
-        | '/note/read'
-        | '/note/update'
-        | '/settings/settings';
-    fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/note'
+    | '/settings'
+    | '/note/create'
+    | '/note/delete'
+    | '/note/read'
+    | '/note/update'
+    | '/settings/settings'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/note'
+    | '/settings'
+    | '/note/create'
+    | '/note/delete'
+    | '/note/read'
+    | '/note/update'
+    | '/settings/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/note'
+    | '/settings'
+    | '/note/create'
+    | '/note/delete'
+    | '/note/read'
+    | '/note/update'
+    | '/settings/settings'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-    IndexRoute: typeof IndexRoute;
-    NoteRouteRoute: typeof NoteRouteRouteWithChildren;
-    SettingsRouteRoute: typeof SettingsRouteRouteWithChildren;
+  IndexRoute: typeof IndexRoute
+  NoteRouteRoute: typeof NoteRouteRouteWithChildren
+  SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
-    interface FileRoutesByPath {
-        '/settings': {
-            id: '/settings';
-            path: '/settings';
-            fullPath: '/settings';
-            preLoaderRoute: typeof SettingsRouteRouteImport;
-            parentRoute: typeof rootRouteImport;
-        };
-        '/note': {
-            id: '/note';
-            path: '/note';
-            fullPath: '/note';
-            preLoaderRoute: typeof NoteRouteRouteImport;
-            parentRoute: typeof rootRouteImport;
-        };
-        '/': {
-            id: '/';
-            path: '/';
-            fullPath: '/';
-            preLoaderRoute: typeof IndexRouteImport;
-            parentRoute: typeof rootRouteImport;
-        };
-        '/settings/settings': {
-            id: '/settings/settings';
-            path: '/settings';
-            fullPath: '/settings/settings';
-            preLoaderRoute: typeof SettingsSettingsRouteImport;
-            parentRoute: typeof SettingsRouteRoute;
-        };
-        '/note/update': {
-            id: '/note/update';
-            path: '/update';
-            fullPath: '/note/update';
-            preLoaderRoute: typeof NoteUpdateRouteImport;
-            parentRoute: typeof NoteRouteRoute;
-        };
-        '/note/read': {
-            id: '/note/read';
-            path: '/read';
-            fullPath: '/note/read';
-            preLoaderRoute: typeof NoteReadRouteImport;
-            parentRoute: typeof NoteRouteRoute;
-        };
-        '/note/delete': {
-            id: '/note/delete';
-            path: '/delete';
-            fullPath: '/note/delete';
-            preLoaderRoute: typeof NoteDeleteRouteImport;
-            parentRoute: typeof NoteRouteRoute;
-        };
-        '/note/create': {
-            id: '/note/create';
-            path: '/create';
-            fullPath: '/note/create';
-            preLoaderRoute: typeof NoteCreateRouteImport;
-            parentRoute: typeof NoteRouteRoute;
-        };
+  interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
+    '/note': {
+      id: '/note'
+      path: '/note'
+      fullPath: '/note'
+      preLoaderRoute: typeof NoteRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/settings': {
+      id: '/settings/settings'
+      path: '/settings'
+      fullPath: '/settings/settings'
+      preLoaderRoute: typeof SettingsSettingsRouteImport
+      parentRoute: typeof SettingsRouteRoute
+    }
+    '/note/update': {
+      id: '/note/update'
+      path: '/update'
+      fullPath: '/note/update'
+      preLoaderRoute: typeof NoteUpdateRouteImport
+      parentRoute: typeof NoteRouteRoute
+    }
+    '/note/read': {
+      id: '/note/read'
+      path: '/read'
+      fullPath: '/note/read'
+      preLoaderRoute: typeof NoteReadRouteImport
+      parentRoute: typeof NoteRouteRoute
+    }
+    '/note/delete': {
+      id: '/note/delete'
+      path: '/delete'
+      fullPath: '/note/delete'
+      preLoaderRoute: typeof NoteDeleteRouteImport
+      parentRoute: typeof NoteRouteRoute
+    }
+    '/note/create': {
+      id: '/note/create'
+      path: '/create'
+      fullPath: '/note/create'
+      preLoaderRoute: typeof NoteCreateRouteImport
+      parentRoute: typeof NoteRouteRoute
+    }
+  }
 }
 
 interface NoteRouteRouteChildren {
-    NoteCreateRoute: typeof NoteCreateRoute;
-    NoteDeleteRoute: typeof NoteDeleteRoute;
-    NoteReadRoute: typeof NoteReadRoute;
-    NoteUpdateRoute: typeof NoteUpdateRoute;
+  NoteCreateRoute: typeof NoteCreateRoute
+  NoteDeleteRoute: typeof NoteDeleteRoute
+  NoteReadRoute: typeof NoteReadRoute
+  NoteUpdateRoute: typeof NoteUpdateRoute
 }
 
 const NoteRouteRouteChildren: NoteRouteRouteChildren = {
-    NoteCreateRoute: NoteCreateRoute,
-    NoteDeleteRoute: NoteDeleteRoute,
-    NoteReadRoute: NoteReadRoute,
-    NoteUpdateRoute: NoteUpdateRoute,
-};
+  NoteCreateRoute: NoteCreateRoute,
+  NoteDeleteRoute: NoteDeleteRoute,
+  NoteReadRoute: NoteReadRoute,
+  NoteUpdateRoute: NoteUpdateRoute,
+}
 
 const NoteRouteRouteWithChildren = NoteRouteRoute._addFileChildren(
-    NoteRouteRouteChildren
-);
+  NoteRouteRouteChildren,
+)
 
 interface SettingsRouteRouteChildren {
-    SettingsSettingsRoute: typeof SettingsSettingsRoute;
+  SettingsSettingsRoute: typeof SettingsSettingsRoute
 }
 
 const SettingsRouteRouteChildren: SettingsRouteRouteChildren = {
-    SettingsSettingsRoute: SettingsSettingsRoute,
-};
+  SettingsSettingsRoute: SettingsSettingsRoute,
+}
 
 const SettingsRouteRouteWithChildren = SettingsRouteRoute._addFileChildren(
-    SettingsRouteRouteChildren
-);
+  SettingsRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
-    IndexRoute: IndexRoute,
-    NoteRouteRoute: NoteRouteRouteWithChildren,
-    SettingsRouteRoute: SettingsRouteRouteWithChildren,
-};
+  IndexRoute: IndexRoute,
+  NoteRouteRoute: NoteRouteRouteWithChildren,
+  SettingsRouteRoute: SettingsRouteRouteWithChildren,
+}
 export const routeTree = rootRouteImport
-    ._addFileChildren(rootRouteChildren)
-    ._addFileTypes<FileRouteTypes>();
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
