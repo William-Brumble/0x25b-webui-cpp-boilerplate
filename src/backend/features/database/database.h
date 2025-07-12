@@ -3,4 +3,4 @@
 
 extern sqlite3pp::database db;
 
-bool init_db(const char* db_name);
+bool init_db(const char *db_name);
