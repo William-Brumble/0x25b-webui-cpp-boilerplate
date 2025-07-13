@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { BookOpen } from 'lucide-react';
 
 import { useNoteGetAll } from '@/services/webui/note-get-all';
+import type { Note } from '@/services/webui/models/note';
 
 export function AllNotes() {
     const { data, isPending, isError, error } = useNoteGetAll();
@@ -20,6 +21,35 @@ export function AllNotes() {
 
     if (isError) {
         return <span>Error: {error.message}</span>;
+    }
+
+    return (
+        <AllNotesPresentation
+            isPending={isPending}
+            isError={isError}
+            error={error}
+            data={data.data}
+        />
+    );
+}
+
+export function AllNotesPresentation({
+    isPending,
+    isError,
+    error,
+    data,
+}: {
+    isPending: boolean;
+    isError: boolean;
+    error: Error | null;
+    data: Note[];
+}) {
+    if (isPending) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <span>Error: {error?.message || ''}</span>;
     }
 
     return (
@@ -38,7 +68,7 @@ export function AllNotes() {
                     <div className="space-y-4">
                         <Separator />
                         <div className="grid gap-4">
-                            {data?.data.map((note) => (
+                            {data?.map((note) => (
                                 <Card
                                     key={note.id}
                                     className="bg-background border"
