@@ -1,40 +1,42 @@
-#include <vector>
-#include <string>
 #include <optional>
-#include <sqlite3pp/sqlite3pp.h>
 #include <spdlog/spdlog.h>
+#include <sqlite3pp/sqlite3pp.h>
+#include <string>
+#include <vector>
 
-#include "features/note/services/note_database.h"
 #include "features/database/database.h"
 #include "features/note/models/note_model.h"
+#include "features/note/services/note_database.h"
 
 bool note_db_init_schema() {
     spdlog::info("note_db_init_schema called");
     try {
         sqlite3pp::command cmd(
-            db,
-            "CREATE TABLE IF NOT EXISTS notes ("
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            "title TEXT NOT NULL, "
-            "content TEXT NOT NULL, "
-            "created_at TEXT NOT NULL DEFAULT (datetime('now'))"
-            ");"
-        );
+            db, "CREATE TABLE IF NOT EXISTS notes ("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "title TEXT NOT NULL, "
+                "content TEXT NOT NULL, "
+                "created_at TEXT NOT NULL DEFAULT (datetime('now'))"
+                ");");
         cmd.execute();
         spdlog::debug("Schema creation command executed successfully");
         return true;
-    } catch (const std::exception& e) {
-        const std::string errorMsg =  "Failed to create table: " + std::string(e.what());
+    } catch (const std::exception &e) {
+        const std::string errorMsg =
+            "Failed to create table: " + std::string(e.what());
         spdlog::error(errorMsg);
         return false;
     }
 }
 
-std::optional<Note> note_db_create(const std::string& pTitle, const std::string& pContent) {
+std::optional<Note> note_db_create(const std::string &pTitle,
+                                   const std::string &pContent) {
     spdlog::info("note_db_create called");
-    spdlog::debug("Inserting note with title: {}, content length: {}", pTitle, pContent.size());
+    spdlog::debug("Inserting note with title: {}, content length: {}", pTitle,
+                  pContent.size());
 
-    sqlite3pp::query qry(db, "INSERT INTO notes (title, content) VALUES (?, ?) RETURNING id, title, content, created_at;");
+    sqlite3pp::query qry(db, "INSERT INTO notes (title, content) VALUES (?, ?) "
+                             "RETURNING id, title, content, created_at;");
     qry.bind(1, pTitle, sqlite3pp::nocopy);
     qry.bind(2, pContent, sqlite3pp::nocopy);
 
@@ -60,7 +62,8 @@ std::vector<Note> note_db_get_all() {
 
     std::vector<Note> notes;
 
-    sqlite3pp::query qry(db, "SELECT id, title, content, created_at FROM notes ORDER BY created_at DESC;");
+    sqlite3pp::query qry(db, "SELECT id, title, content, created_at FROM notes "
+                             "ORDER BY created_at DESC;");
     for (auto row : qry) {
         Note note;
         std::string title, content, created_at;
@@ -80,7 +83,8 @@ std::vector<Note> note_db_get_all() {
 std::optional<Note> note_db_read_by_id(const int64_t pId) {
     spdlog::info("note_db_read_by_id called with id={}", pId);
 
-    sqlite3pp::query qry(db, "SELECT id, title, content, created_at FROM notes WHERE id = ?;");
+    sqlite3pp::query qry(
+        db, "SELECT id, title, content, created_at FROM notes WHERE id = ?;");
     qry.bind(1, static_cast<long long>(pId));
 
     for (auto row : qry) {
@@ -100,12 +104,17 @@ std::optional<Note> note_db_read_by_id(const int64_t pId) {
     return std::nullopt;
 }
 
-std::optional<Note> note_db_update(const int64_t pId, const std::string& pNewTitle, const std::string& pNewContent) {
+std::optional<Note> note_db_update(const int64_t pId,
+                                   const std::string &pNewTitle,
+                                   const std::string &pNewContent) {
     spdlog::info("note_db_update called with id={}", pId);
-    spdlog::debug("New title: {}, new title length: {}", pNewTitle, pNewTitle.size());
-    spdlog::debug("New content: {}, new content length: {}", pNewContent, pNewContent.size());
+    spdlog::debug("New title: {}, new title length: {}", pNewTitle,
+                  pNewTitle.size());
+    spdlog::debug("New content: {}, new content length: {}", pNewContent,
+                  pNewContent.size());
 
-    sqlite3pp::command cmd(db, "UPDATE notes SET title = ?, content = ? WHERE id = ?;");
+    sqlite3pp::command cmd(
+        db, "UPDATE notes SET title = ?, content = ? WHERE id = ?;");
     cmd.bind(1, pNewTitle, sqlite3pp::nocopy);
     cmd.bind(2, pNewContent, sqlite3pp::nocopy);
     cmd.bind(3, static_cast<long long>(pId));

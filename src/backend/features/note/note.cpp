@@ -1,11 +1,11 @@
-#include <vector>
-#include <string>
 #include <optional>
 #include <spdlog/spdlog.h>
+#include <string>
+#include <vector>
 
+#include "features/note/models/note_model.h"
 #include "features/note/note.h"
 #include "features/note/services/note_database.h"
-#include "features/note/models/note_model.h"
 
 bool note_srv_init_schema() {
     spdlog::info("note_srv_init_schema called");
@@ -14,9 +14,11 @@ bool note_srv_init_schema() {
     return result;
 }
 
-std::optional<Note> note_srv_create(const std::string& pTitle, const std::string& pContent) {
+std::optional<Note> note_srv_create(const std::string &pTitle,
+                                    const std::string &pContent) {
     spdlog::info("note_srv_create called");
-    spdlog::debug("Creating note with title: {}, content length: {}", pTitle, pContent.size());
+    spdlog::debug("Creating note with title: {}, content length: {}", pTitle,
+                  pContent.size());
     return note_db_create(pTitle, pContent);
 }
 
@@ -32,9 +34,12 @@ std::optional<Note> note_srv_read_by_id(const int64_t pId) {
     return note_db_read_by_id(pId);
 }
 
-std::optional<Note> note_srv_update(const int64_t pId, const std::string& pNewTitle, const std::string& pNewContent) {
+std::optional<Note> note_srv_update(const int64_t pId,
+                                    const std::string &pNewTitle,
+                                    const std::string &pNewContent) {
     spdlog::info("note_srv_update called with ID: {}", pId);
-    spdlog::debug("New title: {}, new content length: {}", pNewTitle, pNewContent.size());
+    spdlog::debug("New title: {}, new content length: {}", pNewTitle,
+                  pNewContent.size());
     return note_db_update(pId, pNewTitle, pNewContent);
 }
 

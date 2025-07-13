@@ -1,31 +1,30 @@
 #include <iostream>
 
-#include "webui.hpp"
-#include "features/database/database.h"
 #include "features/arguments/arguments.h"
+#include "features/database/database.h"
 #include "features/logging/logger.h"
 #include "features/note/note.h"
 #include "features/note/routes/note_routes.h"
-#include "features/webui/webui.h"
 #include "features/webui/routes/webui_routes.h"
 #include "features/webui/state/webui_state.h"
+#include "features/webui/webui.h"
+#include "webui.hpp"
 
-void exit(webui::window::event *e)
-{
+void exit(webui::window::event *e) {
     spdlog::info("Exit handler triggered");
     (void)e; // mark as unused
     webui::exit();
 }
 
-int main(const int argc, char** argv)
-{
+int main(const int argc, char **argv) {
     std::cout << "Application starting..." << std::endl;
 
     std::cout << "Parsing arguments..." << std::endl;
     Arguments args = init_args(argc, argv);
 
     std::cout << "Creating loggers..." << std::endl;
-    const std::shared_ptr<spdlog::logger> logger = create_logger(args.log_level);
+    const std::shared_ptr<spdlog::logger> logger =
+        create_logger(args.log_level);
     spdlog::info("Logger created");
 
     spdlog::info("Initializing database...");
@@ -89,28 +88,31 @@ int main(const int argc, char** argv)
 }
 
 #if defined(_MSC_VER)
+#include <shellapi.h> // for CommandLineToArgvW
 #include <windows.h>
-#include <shellapi.h>  // for CommandLineToArgvW
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
-{
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                     PSTR lpCmdLine, int nCmdShow) {
     std::cout << "WinMain entry point" << std::endl;
 
     int argc;
-    LPWSTR* argv_w = CommandLineToArgvW(GetCommandLineW(), &argc);
+    LPWSTR *argv_w = CommandLineToArgvW(GetCommandLineW(), &argc);
     if (!argv_w) {
         std::cerr << "Failed to parse command line" << std::endl;
         return -1;
     }
 
-    char** argv = new char*[argc];
+    char **argv = new char *[argc];
     for (int i = 0; i < argc; ++i) {
-        int len = WideCharToMultiByte(CP_UTF8, 0, argv_w[i], -1, nullptr, 0, nullptr, nullptr);
+        int len = WideCharToMultiByte(CP_UTF8, 0, argv_w[i], -1, nullptr, 0,
+                                      nullptr, nullptr);
         argv[i] = new char[len];
-        WideCharToMultiByte(CP_UTF8, 0, argv_w[i], -1, argv[i], len, nullptr, nullptr);
+        WideCharToMultiByte(CP_UTF8, 0, argv_w[i], -1, argv[i], len, nullptr,
+                            nullptr);
     }
 
-    std::cout << "Converted command line arguments from wide to UTF-8" << std::endl;
+    std::cout << "Converted command line arguments from wide to UTF-8"
+              << std::endl;
     int result = main(argc, argv);
 
     for (int i = 0; i < argc; ++i)

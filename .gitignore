@@ -1,6 +1,9 @@
 # sqlite databases
 *.db
 
+# compile_commands.json
+compile_commands.json
+
 # generated vfs.h file
 vfs.h
 
@@ -134,3 +137,4 @@ Thumbs.db
 **/CMakeCache.txt
 **/CMakeFiles/
 .zig-cache
+
