@@ -33,4 +33,5 @@ This is a boilerplate I put together for making desktop apps that are easy to ha
 - **[shadcn/ui](https://ui.shadcn.com/)** - Re-usable components built with Radix UI and Tailwind CSS
 - **[TanStack Query](https://tanstack.com/query)** - Powerful data synchronization for React
 - **[TanStack Router](https://tanstack.com/router/)** - Type-safe, file-optional router for building modern single-page applications
+- **[TanStack Form](https://tanstack.com/form/)** - Type-safe, file-optional router for building modern single-page applications
 - **[Storybook](https://storybook.js.org/)** - Tool for developing and documenting UI components in isolation
